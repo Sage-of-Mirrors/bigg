@@ -2,6 +2,8 @@
  * This is free and unencumbered software released into the public domain. 
  */
 
+#include <filesystem>
+
 static bgfx::VertexLayout  imguiVertexLayout;
 static bgfx::TextureHandle imguiFontTexture;
 static bgfx::UniformHandle imguiFontUniform;
@@ -32,7 +34,13 @@ static void imguiInit( GLFWwindow* window )
 		.end();
 
 	// Create font
-	io.Fonts->AddFontDefault();
+	ImWchar ranges[] = { 0x1, 0xFFFF, 0 };
+
+	if (std::filesystem::exists(".\\res\\font\\Input-Regular-Mono.ttf"))
+		io.Fonts->AddFontFromFileTTF(".\\res\\font\\Input-Regular-Mono.ttf", 16.f, 0, ranges);
+	else
+		io.Fonts->AddFontDefault();
+
 	io.Fonts->GetTexDataAsRGBA32( &data, &width, &height );
 	imguiFontTexture = bgfx::createTexture2D( ( uint16_t )width, ( uint16_t )height, false, 1, bgfx::TextureFormat::BGRA8, 0, bgfx::copy( data, width*height * 4 ) );
 	imguiFontUniform = bgfx::createUniform( "s_tex", bgfx::UniformType::Sampler );
