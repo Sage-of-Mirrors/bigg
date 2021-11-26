@@ -33,13 +33,26 @@ static void imguiInit( GLFWwindow* window )
 		.add( bgfx::Attrib::Color0, 4, bgfx::AttribType::Uint8, true )
 		.end();
 
-	// Create font
+	
 	ImWchar ranges[] = { 0x1, 0xFFFF, 0 };
-
-	if (std::filesystem::exists(".\\res\\font\\Input-Regular-Mono.ttf"))
-		io.Fonts->AddFontFromFileTTF(".\\res\\font\\Input-Regular-Mono.ttf", 16.f, 0, ranges);
+	
+	// Load font for Latin characters from file if it exists, or use imgui's default if not found.
+	std::filesystem::path fontPath = std::filesystem::path(".\\res\\font\\Input-Regular-Mono.ttf");
+	if (std::filesystem::exists(fontPath))
+	{
+		io.Fonts->AddFontFromFileTTF(fontPath.string().c_str(), 18.f, 0, ranges);
+	}
 	else
 		io.Fonts->AddFontDefault();
+
+	// Load font for Japanese characters from file, if it exists.
+	// Imgui has the handy feature that it can use specific font files for specific character ranges.
+	ImFontConfig config;
+	config.MergeMode = true;
+
+	fontPath = std::filesystem::path(".\\res\\font\\NotoSansJP-Regular.otf");
+	if (std::filesystem::exists(fontPath))
+		io.Fonts->AddFontFromFileTTF(fontPath.string().c_str(), 20.f, &config, io.Fonts->GetGlyphRangesJapanese());
 
 	io.Fonts->GetTexDataAsRGBA32( &data, &width, &height );
 	imguiFontTexture = bgfx::createTexture2D( ( uint16_t )width, ( uint16_t )height, false, 1, bgfx::TextureFormat::BGRA8, 0, bgfx::copy( data, width*height * 4 ) );
