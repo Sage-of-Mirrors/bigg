@@ -37,7 +37,7 @@ static void imguiInit( GLFWwindow* window )
 	ImWchar ranges[] = { 0x1, 0xFFFF, 0 };
 	
 	// Load font for Latin characters from file if it exists, or use imgui's default if not found.
-	std::filesystem::path fontPath = std::filesystem::path(".\\res\\font\\Input-Regular-Mono.ttf");
+	std::filesystem::path fontPath = std::filesystem::path("./res/font/Input-Regular-Mono.ttf");
 	if (std::filesystem::exists(fontPath))
 	{
 		io.Fonts->AddFontFromFileTTF(fontPath.string().c_str(), 18.f, 0, ranges);
@@ -50,7 +50,7 @@ static void imguiInit( GLFWwindow* window )
 	ImFontConfig config;
 	config.MergeMode = true;
 
-	fontPath = std::filesystem::path(".\\res\\font\\NotoSansJP-Regular.otf");
+	fontPath = std::filesystem::path("./res/font/NotoSansJP-Regular.otf");
 	if (std::filesystem::exists(fontPath))
 		io.Fonts->AddFontFromFileTTF(fontPath.string().c_str(), 20.f, &config, io.Fonts->GetGlyphRangesJapanese());
 
